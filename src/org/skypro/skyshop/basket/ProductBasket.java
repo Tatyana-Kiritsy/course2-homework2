@@ -1,6 +1,8 @@
 package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.product.SimpleProduct;
+import org.skypro.skyshop.product.DiscountedProduct;
 
 import java.util.Objects;
 
@@ -42,8 +44,7 @@ public class ProductBasket {
         boolean isEmpty = false;
         for (Product product : products) {
             if (product != null) {
-                System.out.println(product.getProductName() + ": " +
-                        product.getProductPrice());
+                System.out.println(product);
                 isEmpty = true;
             }
         }
@@ -52,7 +53,19 @@ public class ProductBasket {
             return;
         }
         System.out.println("Итого: " + getTotalBasketPrice());
+        System.out.println("Специальных товаров: " + checkCounter());
     }
+
+    public int checkCounter() {
+        int counter = 0;
+        for (int i = 0; i < products.length; i++) {
+            if (products[i] != null && products[i].isSpecial() == true) {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
 
     public boolean checkProductByName(String productName) {
         boolean isProduct = false;
@@ -71,6 +84,7 @@ public class ProductBasket {
             }
         }
     }
+
 
 }
 
