@@ -44,7 +44,7 @@ public class SearchEngine {
             }
         }
         if (searchedItem == null) {
-            throw new BestResultNotFoundException("Совпадений для '" + item + "' не найдено");
+            throw new BestResultNotFoundException("Совпадений для '" + item + "' не найдено!");
         }
         return searchedItem;
     }
