@@ -8,12 +8,16 @@ public abstract class Product implements Searchable {
 
 
     public Product(String productName) {
+        if (productName == null || productName.isBlank()) {
+            throw new IllegalArgumentException("Введите название продукта!");
+        }
         this.productName = productName;
     }
 
     public String getProductName() {
-        return productName;
-    }
+            return productName;
+        }
+
 
     public abstract int getProductPrice();
 
@@ -28,5 +32,6 @@ public abstract class Product implements Searchable {
     public String getContentType() {
         return "PRODUCT";
     }
+
 }
 
