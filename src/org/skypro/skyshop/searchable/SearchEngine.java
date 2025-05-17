@@ -1,35 +1,32 @@
 package org.skypro.skyshop.searchable;
 
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchEngine {
-    private final Searchable[] searches;
-    int size;
+    private final List<Searchable> searches;
+    int count;
 
-    public SearchEngine(int size) {
-        searches = new Searchable[size];
+    public SearchEngine() {
+        searches = new ArrayList<>();
     }
 
-    public Searchable[] search(String text) {
-        Searchable[] searchable = new Searchable[size];
-        for (int i = 0; i < searches.length; i++) {
-            if (searches[i] != null &&
-                    searches[i].getSearchedTerm().toLowerCase().contains(text)) {
-                if (i < size) {
-                    searchable[i] = searches[i];
-                }
+    public List<Searchable> search(String text) {
+        List<Searchable> searchable = new ArrayList<>();
+        for (int i = 0; i < searches.size(); i++) {
+            if (searches.get(i) != null &&
+                    searches.get(i).getSearchedTerm().equalsIgnoreCase(text)) {
+                    searchable.set(i, searches.get(i));
             }
         }
         return searchable;
     }
 
     public void add(Searchable search) {
-        if (searches[size] == null) {
-            searches[size] = search;
-            size++;
+        searches.add(search);
         }
-    }
+
 
     public Searchable getSuitableSearchedItem(String item) throws BestResultNotFoundException {
         Searchable searchedItem = null;
@@ -63,10 +60,11 @@ public class SearchEngine {
     @Override
     public String toString() {
         return "SearchEngine{" +
-                "searches=" + Arrays.toString(searches) +
+                "searches=" + searches +
                 '}';
     }
 }
+
 
 
 
