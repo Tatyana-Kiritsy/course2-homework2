@@ -1,69 +1,75 @@
 package org.skypro.skyshop.searchable;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SearchEngine {
-    private final List<Searchable> searches;
-    int count;
+    private final Map<String, Searchable> searches;
 
     public SearchEngine() {
-        searches = new ArrayList<>();
+        searches = new HashMap<>();
     }
 
-    public List<Searchable> search(String text) {
-        List<Searchable> searchable = new ArrayList<>();
-        for (int i = 0; i < searches.size(); i++) {
-            if (searches.get(i) != null &&
-                    searches.get(i).getSearchedTerm().equalsIgnoreCase(text)) {
-                    searchable.set(i, searches.get(i));
+
+    public Map<String, Searchable> search(String text) {
+        Map<String, Searchable> searchableItems = new TreeMap<>();
+        for (Searchable searchable : searches.values()) {
+            if (searchable != null && searchable.getSearchedTerm().contains(text)) {
+                searchableItems.put(searchable.getName(), searchable);
             }
         }
-        return searchable;
+        return searchableItems;
     }
 
     public void add(Searchable search) {
-        searches.add(search);
-        }
+        searches.put(search.getName(), search);
+    }
 
 
     public Searchable getSuitableSearchedItem(String item) throws BestResultNotFoundException {
         Searchable searchedItem = null;
         int countMatches = 0;
-        for (Searchable search : searches) {
-            if (search != null) {
-                int currentCountMatches = countMatches(search.getSearchedTerm(), item);
+        int countMatch = 0;
+        for (Map.Entry<String, Searchable> searchTable : searches.entrySet()) {
+            if (searchTable.getKey().contains(item)) {
+                countMatch++;
+            }
+            if (searchTable.getValue().toString().toLowerCase().contains(item)) {
+                Searchable search = searchTable.getValue();
+                int currentCountMatches = countMatches(search.getSearchedTerm(), item) + countMatch;
                 if (currentCountMatches > countMatches) {
                     searchedItem = search;
                     countMatches = currentCountMatches;
-                }
             }
         }
-        if (searchedItem == null) {
-            throw new BestResultNotFoundException("Совпадений для '" + item + "' не найдено!");
-        }
-        return searchedItem;
+    }
+            if(searchedItem ==null)
+
+    {
+        throw new BestResultNotFoundException("Совпадений для '" + item + "' не найдено!");
     }
 
-    private int countMatches(String text, String item) {
-        int count = 0;
-        int index = 0;
-        while ((index = text.indexOf(item, index)) >= 0) {
-            count++;
-            index = index + item.length();
-        }
-
-        return count;
-    }
-
-    @Override
-    public String toString() {
-        return "SearchEngine{" +
-                "searches=" + searches +
-                '}';
-    }
+            return searchedItem;
 }
+
+private int countMatches(String text, String item) {
+    int count = 0;
+    int index = 0;
+    while ((index = text.indexOf(item, index)) >= 0) {
+        count++;
+        index = index + item.length();
+    }
+
+    return count;
+}
+
+@Override
+public String toString() {
+    return "SearchEngine{" +
+            "searches=" + searches +
+            '}';
+}
+    }
 
 
 

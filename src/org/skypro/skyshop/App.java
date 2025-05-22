@@ -4,11 +4,11 @@ import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.basket.ProductBasket;
 import org.skypro.skyshop.product.DiscountedProduct;
 import org.skypro.skyshop.product.FixPriceProduct;
+import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.product.SimpleProduct;
 import org.skypro.skyshop.searchable.BestResultNotFoundException;
 import org.skypro.skyshop.searchable.SearchEngine;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,6 +18,11 @@ public class App {
 
         SearchEngine searchEngine = new SearchEngine();
         ProductBasket basketOne = new ProductBasket();
+        Article articleTwo = new Article("Oils", "For porridge and " +
+                "salad: oils!");
+        Article articleOne = new Article("Extra sweet!", "To give taste " +
+                "without sugar!");
+
         basketOne.addProduct(new DiscountedProduct("orange",
                 100, 10));
         basketOne.addProduct(new FixPriceProduct("biscuits"));
@@ -28,20 +33,20 @@ public class App {
         basketOne.addProduct(new DiscountedProduct("sugar", 98, 5));
         basketOne.addProduct(new SimpleProduct("pepper", 18));
         basketOne.addProduct(new FixPriceProduct("garlic"));
+        basketOne.addProduct(new FixPriceProduct("meat"));
 
-
-        Article articleTwo = new Article("Oils", "For porridge and " +
-                "salad: oils!");
-        Article articleOne = new Article("Extra oil", "To give taste " +
-                "without sugar!");
-
-        searchEngine.add(new DiscountedProduct("sugar", 98,
+        searchEngine.add(new FixPriceProduct("sugar"));
+        searchEngine.add(new SimpleProduct("eggs", 110));
+        searchEngine.add(new DiscountedProduct("sugar",
+                80, 10));
+        searchEngine.add(new DiscountedProduct("salt", 98,
                 5));
         searchEngine.add(new SimpleProduct("butter", 135));
         searchEngine.add(articleOne);
         searchEngine.add(articleTwo);
         searchEngine.add(new Article("Extra dressing oil oil oil", "How to make your " +
-                "meal  extra spicy"));
+                "meal  extra spicy with eggs"));
+
 
         try {
             DiscountedProduct basket = new DiscountedProduct("pasta",
@@ -56,12 +61,18 @@ public class App {
         } catch (BestResultNotFoundException e) {
             System.out.println("ОШИБКА: " + e.getMessage());
         }
+        List<Product> productListOne = basketOne.removeProductByName(List.of("pepper", "oil"));
+        printRemovedProducts(productListOne);
 
+
+        System.out.println(searchEngine.search("egg"));
         System.out.println(searchEngine.getSuitableSearchedItem("oil"));
         System.out.println();
         basketOne.printBasket();
         System.out.println();
         basketOne.addProduct(new SimpleProduct("tomato", 575));
+        basketOne.addProduct(new FixPriceProduct("tomato"));
+        basketOne.addProduct(new SimpleProduct("tomato", 500));
         basketOne.printBasket();
         System.out.println();
         System.out.println("Общая стоимость корзины: " + basketOne.getTotalBasketPrice());
@@ -70,8 +81,7 @@ public class App {
         System.out.println();
         System.out.println(basketOne.checkProductByName("tomato"));
         System.out.println();
-        basketOne.removeProductByName(List.of("sugar", "orange","vinegar"));
-        basketOne.removeProductByName(List.of("plum","vinegar"));
+
         basketOne.printBasket();
         System.out.println();
         System.out.println("Общая стоимость корзины: " + basketOne.getTotalBasketPrice());
@@ -80,5 +90,13 @@ public class App {
         System.out.println();
         basketOne.clearBasket();
         basketOne.printBasket();
+    }
+
+    private static void printRemovedProducts(List<Product> productListOne) {
+        if (productListOne.isEmpty()){
+            System.out.println("Список пуст");
+        } else{
+            System.out.println("Список удаленных продуктов: " + productListOne);
+        }
     }
 }

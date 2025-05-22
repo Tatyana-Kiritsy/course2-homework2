@@ -22,3 +22,4 @@ public class FixPriceProduct extends Product {
         return super.getProductName() + ": " + getProductPrice();
     }
 }
+
