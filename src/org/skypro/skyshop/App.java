@@ -18,9 +18,9 @@ public class App {
 
         SearchEngine searchEngine = new SearchEngine();
         ProductBasket basketOne = new ProductBasket();
-        Article articleTwo = new Article("Oils", "For porridge and " +
+        Article articleTwo = new Article("Easter Eggs", "For porridge and " +
                 "salad: oils!");
-        Article articleOne = new Article("Extra sweet!", "To give taste " +
+        Article articleOne = new Article("Extra sweet sugar!", "To give taste " +
                 "without sugar!");
 
         basketOne.addProduct(new DiscountedProduct("orange",
@@ -35,7 +35,7 @@ public class App {
         basketOne.addProduct(new FixPriceProduct("garlic"));
         basketOne.addProduct(new FixPriceProduct("meat"));
 
-        searchEngine.add(new FixPriceProduct("sugar"));
+        searchEngine.add(new FixPriceProduct("Extra Eggs"));
         searchEngine.add(new SimpleProduct("eggs", 110));
         searchEngine.add(new DiscountedProduct("sugar",
                 80, 10));
@@ -45,7 +45,7 @@ public class App {
         searchEngine.add(articleOne);
         searchEngine.add(articleTwo);
         searchEngine.add(new Article("Extra dressing oil oil oil", "How to make your " +
-                "meal  extra spicy with eggs"));
+                "meal extra spicy with salt"));
 
 
         try {
@@ -61,17 +61,16 @@ public class App {
         } catch (BestResultNotFoundException e) {
             System.out.println("ОШИБКА: " + e.getMessage());
         }
+
         List<Product> productListOne = basketOne.removeProductByName(List.of("pepper", "oil"));
         printRemovedProducts(productListOne);
-
-
         System.out.println(searchEngine.search("egg"));
-        System.out.println(searchEngine.getSuitableSearchedItem("oil"));
+        System.out.println(searchEngine.getSuitableSearchedItem("sugar"));
         System.out.println();
         basketOne.printBasket();
         System.out.println();
-        basketOne.addProduct(new SimpleProduct("tomato", 575));
-        basketOne.addProduct(new FixPriceProduct("tomato"));
+        basketOne.addProduct(new SimpleProduct("tomatoes", 575));
+        basketOne.addProduct(new FixPriceProduct("Extra tomato"));
         basketOne.addProduct(new SimpleProduct("tomato", 500));
         basketOne.printBasket();
         System.out.println();
@@ -93,9 +92,9 @@ public class App {
     }
 
     private static void printRemovedProducts(List<Product> productListOne) {
-        if (productListOne.isEmpty()){
+        if (productListOne.isEmpty()) {
             System.out.println("Список пуст");
-        } else{
+        } else {
             System.out.println("Список удаленных продуктов: " + productListOne);
         }
     }

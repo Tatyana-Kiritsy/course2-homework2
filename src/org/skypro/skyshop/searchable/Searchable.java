@@ -11,5 +11,4 @@ public interface Searchable {
     default void getStringRepresentation() {
         System.out.println("Наименование: " + getSearchedTerm() + " тип:" + getContentType());
     }
-
 }
