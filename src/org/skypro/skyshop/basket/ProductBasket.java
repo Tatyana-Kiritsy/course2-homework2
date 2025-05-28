@@ -1,34 +1,34 @@
 package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.searchable.Searchable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import static java.util.Spliterators.iterator;
 
 public class ProductBasket {
-    private final List<Product> products = new ArrayList<>();
-    String productName;
+    private final Map<String, List<Product>> products = new HashMap<>();
 
 
-    public List<Product> getProducts() {
+    public Map<String, List<Product>> getProducts() {
         return products;
     }
 
 
     public void addProduct(Product product) {
-        products.add(product);
+        products.computeIfAbsent(product.getProductName(), k -> new ArrayList<>()).add(product);
     }
 
 
     public int getTotalBasketPrice() {
         int totalPrice = 0;
-        for (Product oneProduct : products) {
-            if (oneProduct != null) {
-                totalPrice += oneProduct.getProductPrice();
+        for (List<Product> oneProduct : products.values()) {
+            if (!oneProduct.isEmpty()) {
+                for (Product product : oneProduct) {
+                    totalPrice += product.getProductPrice();
+                }
             }
         }
         return totalPrice;
@@ -36,9 +36,9 @@ public class ProductBasket {
 
     public void printBasket() {
         boolean isEmpty = false;
-        for (Product product : products) {
-            if (product != null) {
-                System.out.println(product);
+        for (Map.Entry<String, List<Product>> productTable : products.entrySet()) {
+            if (productTable != null) {
+                System.out.println(productTable);
                 isEmpty = true;
             }
         }
@@ -52,19 +52,22 @@ public class ProductBasket {
 
     public int checkCounter() {
         int counter = 0;
-        for (Product product : products) {
-            if (product != null && product.isSpecial()) {
-                counter++;
+        for (List<Product> oneProduct : products.values()) {
+            if (!oneProduct.isEmpty()) {
+                for (Product product : oneProduct) {
+                    if (product != null && product.isSpecial()) {
+                        counter++;
+                    }
+                }
             }
         }
         return counter;
     }
 
-
-    public boolean checkProductByName(String productName) {
+    public boolean checkProductByName(String product) {
         boolean isProduct = false;
-        for (Product product : products) {
-            if (product != null && Objects.equals(product.getProductName(), productName)) {
+        for (String productName : products.keySet()) {
+            if (productName != null && products.containsKey(product)) {
                 return !isProduct;
             }
         }
@@ -75,25 +78,24 @@ public class ProductBasket {
         products.clear();
     }
 
-
-    public List<Product> removeProductByName(List<String> productsName) {
-        List<Product> productsList = new ArrayList<>();
-        Iterator<Product> iterator = products.iterator();
-        while (iterator.hasNext()) {
-            Product product = iterator.next();
-            if (product != null && productsName.contains(product.getProductName())) {
-                productsList.add(product);
-                iterator.remove();
+    public List<Product> removeProductByName(List<String> itemsList) {
+        List<Product> removedProductsList = new ArrayList<>();
+        for (String item : itemsList) {
+            List<Product> removedProducts = products.remove(item);
+            if (removedProducts != null) {
+                removedProductsList.addAll(removedProducts);
             }
         }
-        if (productsList.isEmpty()) {
-            System.out.println("Список пуст");
-        } else {
-        System.out.println("Список удаленных продуктов: " + productsList);
-        }
-        return productsList;
+        return removedProductsList;
     }
 }
+
+
+
+
+
+
+
 
 
 
