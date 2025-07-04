@@ -87,8 +87,10 @@ public class App {
         System.out.println();
         System.out.println(basketOne.checkProductByName("peach"));
         System.out.println();
+        System.out.println(searchEngine.search("salt"));
         basketOne.clearBasket();
         basketOne.printBasket();
+
     }
 
     private static void printRemovedProducts(List<Product> productListOne) {
