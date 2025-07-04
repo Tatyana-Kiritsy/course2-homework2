@@ -7,45 +7,30 @@ import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class ProductBasket {
     private final Map<String, List<Product>> products = new HashMap<>();
 
-
-    public Map<String, List<Product>> getProducts() {
-        return products;
-    }
-
-
     public void addProduct(Product product) {
-        products.computeIfAbsent(product.getProductName(), k -> new ArrayList<>()).add(product);
+        List<Product> productList = products.computeIfAbsent(product.getProductName(),
+                k -> new ArrayList<>());
+        productList.add(product);
     }
-
 
     public int getTotalBasketPrice() {
-        int totalPrice = 0;
-        for (List<Product> oneProduct : products.values()) {
-            if (!oneProduct.isEmpty()) {
-                for (Product product : oneProduct) {
-                    totalPrice += product.getProductPrice();
-                }
-            }
-        }
-        return totalPrice;
+        return products.values().stream()
+                .flatMap(Collection::stream)
+                .mapToInt(Product::getProductPrice)
+                .sum();
     }
 
     public void printBasket() {
-        boolean isEmpty = false;
-        for (Map.Entry<String, List<Product>> productTable : products.entrySet()) {
-            if (productTable != null) {
-                System.out.println(productTable);
-                isEmpty = true;
-            }
-        }
-        if (!isEmpty) {
+        if (products.isEmpty()) {
             System.out.println("В корзине пусто");
             return;
         }
+        products.entrySet()
+                .forEach(System.out::println);
+
         System.out.println("Итого: " + getTotalBasketPrice());
         System.out.println("Специальных товаров: " + checkCounter());
     }
